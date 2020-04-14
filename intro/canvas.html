@@ -1,0 +1,334 @@
+<script>
+    window.can = document.getElementById("demoCanvas")
+    window.pen = can.getContext('2d')
+    pen.lineWidth = 4
+    window.strokeMode = true
+  
+    window.setStrokeStyle = function() {
+      strokeMode = true
+      pen.lineWidth = document.getElementById('canLineWidth').value
+      pen.strokeStyle = document.getElementById('strokeColor').value
+    }
+    window.setFillStyle = function() {
+      strokeMode = false
+      pen.lineWidth = event.target.value
+      pen.fillStyle = document.getElementById('fillColor').value
+    }
+  
+    window.linearGradient = function() {
+      // Gradient create an imaginary line and transitions between 
+      // colors along the line for filling or stroking
+      var grad = pen.createLinearGradient(200, 200, 350, 350)
+      grad.addColorStop(0, "red")  //The start of the imaginary line is 0
+      grad.addColorStop(0.3, "yellow")
+      grad.addColorStop(0.6, "pink")
+      grad.addColorStop(1, "blue") //The end of the imaginary line is 1
+      pen.strokeStyle = grad
+      pen.fillStyle = grad
+    }
+  
+    window.radialGradient = function() {
+      // Gradient create an imaginary line and transitions between 
+      // colors along the line for filling or stroking
+      var grad = pen.createRadialGradient(200, 200, 100, 250, 250, 200)
+      grad.addColorStop(0, "red")  //The start of the imaginary line is 0
+      grad.addColorStop(0.3, "yellow")
+      grad.addColorStop(0.6, "pink")
+      grad.addColorStop(1, "blue") //The end of the imaginary line is 1
+      pen.strokeStyle = grad
+      pen.fillStyle = grad
+    }
+  
+    window.line = function() {
+      pen.beginPath()
+      pen.moveTo(100, 150)
+      pen.lineTo(400, 350)
+      if (strokeMode) {
+        pen.stroke()
+      } else {
+        pen.fill()
+      }
+    }
+  
+    window.rectangle = function() {
+      if (strokeMode) {
+        pen.strokeRect(50, 50, 400, 400)
+      } else {
+        pen.fillRect(50, 50, 400, 400)
+      }
+    }
+  
+    window.arc = function() {
+      // Arcs are path, they can be stroked or filled
+      // Angles use radians so 360 degrees => 6.2831852 radians
+      // 6.2831852 = 2 x PI
+      // So half a circle is Math.PI radians, and below is 3/4 of a circle
+      // Arcs can also revolve in the opposite direction, see path()
+      pen.beginPath()
+      pen.arc(250, 250, 200, 0, Math.PI * 1.5) // x, y, radius, startAngle, endAngle
+      if (strokeMode) {
+        pen.stroke()
+      } else {
+        pen.fill()
+      }
+    }
+  
+    window.bezier = function() {
+      pen.beginPath()
+      pen.moveTo(50, 250)
+      pen.bezierCurveTo(433, 48, 273, 432, 400, 250)
+      if (strokeMode) {
+        pen.stroke()
+      } else {
+        pen.fill()
+      }
+    }
+  
+    window.path = function() {
+      pen.beginPath()
+      pen.arc(150, 200, 100, Math.PI, 2 * Math.PI)
+      pen.lineTo(250, 300)
+      pen.arc(350, 300, 100, Math.PI, 0, true) // Reverse revolution)
+      pen.bezierCurveTo(450, 225, 154, 202, 419, 62)
+      if (strokeMode) {
+        pen.stroke()
+      } else {
+        pen.fill()
+      }
+    }
+  
+    window.renderText = function() {
+      var words = document.getElementById("canWords").value
+      pen.beginPath()
+      pen.font = "65px sans-serif"
+      if (strokeMode) {
+        pen.strokeText(words, 100, 300)
+      } else {
+        pen.fillText(words, 100, 300)
+      }
+    }
+  
+    window.saveRestore = function(){
+      // pen.clearRect(0,0,500,500)
+  
+      // save() and restore() are used to take the current state 
+      // and push to or pop from an insternal stack.
+  
+      //Before saving, the globalAlpha = 1
+      pen.save()
+        pen.globalAlpha = 0.25
+        pen.translate(50,-50)
+        
+        rectangle()
+  
+        pen.save()
+          pen.rotate(Math.PI/4)
+          rectangle()
+  
+        pen.restore()
+  
+      pen.restore()
+      //Now the globalAlpha has been restored to 1
+      rectangle()
+    }
+  
+  </script>
+
+<div style="text-align: center;">
+  <div class="boxed">
+    <div style="display: inline-block;">
+      <div>
+        <input onclick="setStrokeStyle()" name="canMode" type="radio" id="canStroke" checked>
+        <label for="canStroke">Stroke</label>
+        <input onchange="setStrokeStyle()" type="color" id="strokeColor">
+        <br>
+        <label for="canFill"> LineWidth</label>
+        <input onchange="setStrokeStyle()" id="canLineWidth" type="number" min="1" max="20" value="4" class="boxed">
+      </div>
+      <div>
+        <input onclick="setFillStyle()" name="canMode" type="radio" id="canFill">
+        <label for="canFill">Fill</label>
+        <input onchange="setFillStyle()" type="color" id="fillColor">
+      </div>
+    </div>
+    <div style="display: inline-block;">
+      <a onclick="linearGradient()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default warning">
+        <span class="v-btn__content">Use Linear Gradient</span>
+      </a><br>
+      <a onclick="radialGradient()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default warning">
+        <span class="v-btn__content">Use Radial Gradient</span>
+      </a>
+    </div>
+  </div><br>
+  <div class="boxed">
+    <a href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default danger"
+      onclick="pen.clearRect(0, 0, 500, 500)">
+      <span class="v-btn__content">Clear</span>
+    </a>
+    <a onclick="line()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Line</span>
+    </a>
+    <a onclick="rectangle()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Rectangle</span>
+    </a>
+    <a onclick="arc()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Arc</span>
+    </a>
+    <a onclick="bezier()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Bezier Curve</span>
+    </a>
+    <a onclick="path()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Compound Path</span>
+    </a>
+    <a onclick="saveRestore()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Save/Restore State</span>
+    </a>
+    <hr>
+    <a onclick="renderText()" href="#" class="ma-1 v-btn v-btn--contained theme--dark v-size--default success">
+      <span class="v-btn__content">Text</span>
+    </a>
+    <input class="boxed" id="canWords" value="Hello world!"/>
+  </div><br>
+  <canvas id="demoCanvas" class="boxed" width="500" height="500"></canvas>
+</div>
+<style>
+  .boxed {
+    border: 2px solid lightgrey;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+  }
+</style>
+
+<pre data-v-48820b79="" class="language-js" style="white-space: pre-wrap;"><span class="token keyword">var</span> can <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"demoCanvas"</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> pen <span class="token operator">=</span> can<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">'2d'</span><span class="token punctuation">)</span>
+pen<span class="token punctuation">.</span>lineWidth <span class="token operator">=</span> <span class="token number">4</span>
+<span class="token keyword">var</span> strokeMode <span class="token operator">=</span> <span class="token boolean">true</span>
+
+<span class="token keyword">function</span> <span class="token function">setStrokeStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  strokeMode <span class="token operator">=</span> <span class="token boolean">true</span>
+  pen<span class="token punctuation">.</span>lineWidth <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'canLineWidth'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value
+  pen<span class="token punctuation">.</span>strokeStyle <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'strokeColor'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value
+<span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">setFillStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  strokeMode <span class="token operator">=</span> <span class="token boolean">false</span>
+  pen<span class="token punctuation">.</span>lineWidth <span class="token operator">=</span> event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
+  pen<span class="token punctuation">.</span>fillStyle <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'fillColor'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">linearGradient</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Gradient create an imaginary line and transitions between </span>
+  <span class="token comment">// colors along the line for filling or stroking</span>
+  <span class="token keyword">var</span> grad <span class="token operator">=</span> pen<span class="token punctuation">.</span><span class="token function">createLinearGradient</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">350</span><span class="token punctuation">,</span> <span class="token number">350</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"red"</span><span class="token punctuation">)</span>  <span class="token comment">//The start of the imaginary line is 0</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token string">"yellow"</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0.6</span><span class="token punctuation">,</span> <span class="token string">"pink"</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"blue"</span><span class="token punctuation">)</span> <span class="token comment">//The end of the imaginary line is 1</span>
+  pen<span class="token punctuation">.</span>strokeStyle <span class="token operator">=</span> grad
+  pen<span class="token punctuation">.</span>fillStyle <span class="token operator">=</span> grad
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">radialGradient</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Gradient create an imaginary line and transitions between </span>
+  <span class="token comment">// colors along the line for filling or stroking</span>
+  <span class="token keyword">var</span> grad <span class="token operator">=</span> pen<span class="token punctuation">.</span><span class="token function">createRadialGradient</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"red"</span><span class="token punctuation">)</span>  <span class="token comment">//The start of the imaginary line is 0</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token string">"yellow"</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0.6</span><span class="token punctuation">,</span> <span class="token string">"pink"</span><span class="token punctuation">)</span>
+  grad<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"blue"</span><span class="token punctuation">)</span> <span class="token comment">//The end of the imaginary line is 1</span>
+  pen<span class="token punctuation">.</span>strokeStyle <span class="token operator">=</span> grad
+  pen<span class="token punctuation">.</span>fillStyle <span class="token operator">=</span> grad
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">line</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  pen<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">moveTo</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">lineTo</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">350</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">stroke</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">strokeRect</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fillRect</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">arc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Arcs are path, they can be stroked or filled</span>
+  <span class="token comment">// Angles use radians so 360 degrees =&gt; 6.2831852 radians</span>
+  <span class="token comment">// 6.2831852 = 2 x PI</span>
+  <span class="token comment">// So half a circle is Math.PI radians, and below is 3/4 of a circle</span>
+  <span class="token comment">// Arcs can also revolve in the opposite direction, see path()</span>
+  pen<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">arc</span><span class="token punctuation">(</span><span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span> <span class="token operator">*</span> <span class="token number">1.5</span><span class="token punctuation">)</span> <span class="token comment">// x, y, radius, startAngle, endAngle</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">stroke</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">bezier</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  pen<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">moveTo</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">bezierCurveTo</span><span class="token punctuation">(</span><span class="token number">433</span><span class="token punctuation">,</span> <span class="token number">48</span><span class="token punctuation">,</span> <span class="token number">273</span><span class="token punctuation">,</span> <span class="token number">432</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">stroke</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">path</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  pen<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">arc</span><span class="token punctuation">(</span><span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token operator">*</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">lineTo</span><span class="token punctuation">(</span><span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span><span class="token function">arc</span><span class="token punctuation">(</span><span class="token number">350</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token comment">// Reverse revolution)</span>
+  pen<span class="token punctuation">.</span><span class="token function">bezierCurveTo</span><span class="token punctuation">(</span><span class="token number">450</span><span class="token punctuation">,</span> <span class="token number">225</span><span class="token punctuation">,</span> <span class="token number">154</span><span class="token punctuation">,</span> <span class="token number">202</span><span class="token punctuation">,</span> <span class="token number">419</span><span class="token punctuation">,</span> <span class="token number">62</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">stroke</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">renderText</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> words <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"canWords"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value
+  pen<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  pen<span class="token punctuation">.</span>font <span class="token operator">=</span> <span class="token string">"65px sans-serif"</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>strokeMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">strokeText</span><span class="token punctuation">(</span>words<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    pen<span class="token punctuation">.</span><span class="token function">fillText</span><span class="token punctuation">(</span>words<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">saveRestore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token comment">// pen.clearRect(0,0,500,500)</span>
+
+  <span class="token comment">// save() and restore() are used to take the current state </span>
+  <span class="token comment">// and push to or pop to and from an insternal stack.</span>
+
+  <span class="token comment">//Before saving, the globalAlpha = 1</span>
+  pen<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pen<span class="token punctuation">.</span>globalAlpha <span class="token operator">=</span> <span class="token number">0.25</span>
+    pen<span class="token punctuation">.</span><span class="token function">translate</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">50</span><span class="token punctuation">)</span>
+    
+    <span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    pen<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      pen<span class="token punctuation">.</span><span class="token function">rotate</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token constant">PI</span><span class="token operator">/</span><span class="token number">4</span><span class="token punctuation">)</span>
+      <span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    pen<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  pen<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token comment">//Now the globalAlpha has been restored to 1</span>
+  <span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></pre>
