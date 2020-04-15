@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebSockets and Canvas</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <style>
+  canvas{
+    border: 2px solid grey;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="groupCanvas" width="600" height="600"></canvas>
+  <button onclick="clearCanvas()">Clear</button>
+  <script>
+    var can = $('#groupCanvas')
+    var pen = can[0].getContext('2d')
+    pen.lineWidth = 2
+
+    var drawing = false
+    var lastX, lastY
+
+    can.on('mousedown', function(ev){
+      drawing = true
+      lastX = ev.offsetX
+      lastY = ev.offsetY
+    })
+    can.on('mouseup mouseout mouseleave', function(ev){
+      drawing = false
+    })
+    can.on('mousemove', function(ev){
+      if(!drawing) return
+
+      var obj = {
+        action: "drawLine",
+        x1: lastX, y1: lastY,
+        x2: ev.offsetX, y2: ev.offsetY
+      }
+
+      lastX = ev.offsetX
+      lastY = ev.offsetY
+      drawLine(obj)
+      if(ws.readyState == WebSocket.OPEN){
+        ws.send(JSON.stringify(obj))
+      }
+    })
+
+    function drawLine(coords){
+      pen.beginPath()
+      pen.moveTo(coords.x1, coords.y1)
+      pen.lineTo(coords.x2, coords.y2)
+      pen.stroke()
+    }
+    function clearCanvas(){
+      pen.clearRect(0,0,600,600)
+      var obj = {
+        action: "clearCanvas"
+      }
+      if(ws.readyState == WebSocket.OPEN){
+        ws.send(JSON.stringify(obj))
+      }
+    }
+    var ws = new WebSocket('ws://10.71.111.118:8082')
+    ws.addEventListener('message', function(ev){
+      var obj = JSON.parse(ev.data)
+      
+      switch(obj.action){
+        case 'drawLine':
+          drawLine(obj)
+          break;
+        case 'clearCanvas':
+          pen.clearRect(0,0,600,600)
+          break;
+      }
+    })
+  </script>
+</body>
+</html>

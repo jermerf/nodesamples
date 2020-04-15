@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(()=>{
+      $.get("/student", students => {
+        for(const stu of students){
+          $('#students').append(
+            $('<li>').text(stu.name + "-" + stu.age)
+          )
+        }
+      })
+    })
+      
+  </script>
+</head>
+<body>
+  <form method="GET" action="/student/add">
+    <input type="text" name="studentname">
+    <input type="number" name="age">
+    <input type="submit" />
+  </form>
+  <ul id="students"></ul>
+</body>
+</html>

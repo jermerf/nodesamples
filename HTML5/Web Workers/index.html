@@ -1,0 +1,26 @@
+
+<button onclick="start()">Start Web Worker</button>
+<button onclick="stop()">Stop Web Worker</button>
+
+<script>
+  var worker
+  function start(){
+    if(worker) {
+      alert("Worker is already running")
+      return
+    }else{
+      worker = new Worker("worker.js")
+      worker.onmessage = gotMessage
+    }
+  }
+  function stop(){
+    worker.terminate()
+    worker = undefined
+  }
+  function gotMessage(ev){
+    var d = document.createElement('div')
+    d.innerText = ev.data
+    document.body.appendChild(d)
+  }
+
+</script>

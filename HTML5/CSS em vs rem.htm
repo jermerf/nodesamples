@@ -1,0 +1,39 @@
+<style>
+  div.notes div {
+    border: 2px solid lightgrey;
+    padding: 5px;
+    margin: 2px;
+  }
+
+  div.notes div.em {
+    font-size: 1.5em;
+    line-height: 1.5em;
+  }
+
+  div.notes div.rem {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
+</style>
+
+<div class="notes">
+  <p>An <span class="font-weight-bold">em</span> is relative to the font-size of the current elements parent.</p>
+  <p>An <span class="font-weight-bold">rem</span> is relative to the html (root) tag's font-size.</p>
+
+  <div class="em">em
+    <div class="em">em
+      <div class="em">em
+        <div class="em">em</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rem">rem
+    <div class="rem">rem
+      <div class="rem">rem
+        <div class="rem">rem</div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,73 @@
+<button onclick="isGeolocationSupported()">Is Geolocation Supported</button>
+
+<button onclick="getGpsLocation()">Get Current Location</button>
+
+<button onclick="watchGpsLocation()">Watch GPS Location</button>
+
+<div id="geoStatus"></div>
+
+<script>
+
+function isGeolocationSupported(){
+  if(navigator.geolocation) {
+    document.getElementById('geoStatus').innerHTML = "GPS is supported"
+  }else{
+    document.getElementById('geoStatus').innerHTML = "GPS Not supported"
+  }
+}
+
+function getGpsLocation(){
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError)
+  }else{
+    document.getElementById('geoStatus').innerHTML = "GPS Not supported"
+  }
+}
+
+function watchGpsLocation(){
+  if(navigator.geolocation) {
+    navigator.geolocation.watchPosition(geolocationSuccess, geolocationError)
+  }else{
+    document.getElementById('geoStatus').innerHTML = "GPS Not supported"
+  }
+}
+
+function geolocationSuccess(position){
+  // Clear out old value
+  document.getElementById('geoStatus').innerHTML = ""
+
+  // Div for timestamp property
+  var timeStampDiv = document.createElement('div')
+  timeStampDiv.innerText = "timestamp: " + position.timestamp 
+    + " - " + new Date(position.timestamp)
+  document.getElementById('geoStatus').appendChild(timeStampDiv)
+
+  // Location properties are attached to the coord property
+  for(var propName in position.coords){
+    var div = document.createElement('div')
+    div.innerText = propName + ": " + position.coords[propName]
+    document.getElementById('geoStatus').appendChild(div)
+  }
+  document.getElementById('geoStatus').appendChild(
+    document.createElement('hr')
+  )
+}
+
+function geolocationError(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      document.getElementById('geoStatus').innerHTML = "Need persmission to get location"
+      break
+    case error.POSITION_UNAVAILABLE:
+      document.getElementById('geoStatus').innerHTML = "Position is unavailable"
+      break
+    case error.TIMEOUT:
+      document.getElementById('geoStatus').innerHTML = "Timed out getting location"
+      break
+    case error.UNKNOWN_ERROR:
+      document.getElementById('geoStatus').innerHTML = "An unknown error occurred"
+      break
+  }
+}
+
+</script>
