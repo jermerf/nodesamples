@@ -1,8 +1,31 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": "BlogSite"
+		},
+		{
+			"path": "ejs-sample"
+		},
+		{
+			"path": "intro"
+		},
+		{
+			"path": "mongo-sample"
+		},
+		{
+			"path": "req-res-db"
+		},
+		{
+			"path": "requests"
+		},
+		{
+			"path": "routing"
+		},
+		{
+			"path": "..\\..\\..\\Projects\\LifeEvents"
+		},
+		{
+			"path": "mongo-mysql"
 		}
-	],
-	"settings": {}
+	]
 }

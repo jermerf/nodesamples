@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  position: fixed;
+  top: calc(5px + 1em + 5px);
+  bottom: calc(5px + 1em + 5px);
+  left: 0;
+  right: 0;
+}
+header, footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background-color: burlywood;
+  padding: 5px;
+}
+header img{
+  background-color: #eee;
+  height: 12px;
+  padding: 2px;
+}
+header span {
+  display: inline-block;
+}
+header {
+  top: 0;
+}
+footer {
+  bottom: 0;
+}
+main {
+  background-color: rosybrown;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 100%;
+  box-sizing: border-box;
+}
