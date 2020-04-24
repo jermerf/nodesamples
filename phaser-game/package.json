@@ -1,0 +1,17 @@
+{
+  "name": "phaser-game",
+  "version": "1.0.0",
+  "description": "babel and webpack compiled game",
+  "main": "index.js",
+  "author": "Jermaine Francoeur",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "phaser": "^3.22.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^7.0.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0"
+  }
+}

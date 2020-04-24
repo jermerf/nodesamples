@@ -1,9 +1,6 @@
 {
 	"folders": [
 		{
-			"path": "BlogSite"
-		},
-		{
 			"path": "ejs-sample"
 		},
 		{
@@ -26,6 +23,18 @@
 		},
 		{
 			"path": "mongo-mysql"
+		},
+		{
+			"path": "..\\..\\..\\supernotes"
+		},
+		{
+			"path": "..\\..\\BlogSite"
+		},
+		{
+			"path": "..\\..\\FileBrowser"
+		},
+		{
+			"path": "phaser-game"
 		}
 	]
 }

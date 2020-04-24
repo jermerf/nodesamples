@@ -1,4 +1,14 @@
+<style>
+  .loginbox {
+    float: right;
+  }
+</style>
 <header>
   <img src="/public/content/css/img/logo.png">
   <span>Header</span>
+  <% if(isLoggedIn) { %>
+    <div class="loginbox">You are logged in as <%= username %></div>
+  <% }else{ %>
+    <%- include('./loginform.ejs') %>
+  <% } %>
 </header>
