@@ -6,9 +6,6 @@ module.exports = MongoClient.connect(DB_URL, {useUnifiedTopology: true})
 .then(client => {
   return client.db('classroom')
 })
-.then(db => {
-  return db.createCollection("students")
-})
-    .catch(error => {
-      console.log("DATABASE", error)
+.catch(error => {
+  console.log("DATABASE", error)
 })

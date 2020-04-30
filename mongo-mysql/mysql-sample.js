@@ -15,7 +15,7 @@ var insertPost = (ownerId, content) => {
       ${mysql.escape(new Date())}
     )`
   blogsiteDb.query(query, (error, rows, fields) => {
-    // console.log({error, rows, fields})
+    console.log({error, rows, fields})
   })
 }
 

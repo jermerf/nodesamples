@@ -35,6 +35,12 @@
 		},
 		{
 			"path": "phaser-game"
+		},
+		{
+			"path": "..\\..\\FileBrowser\\server\\public\\notes\\-Past Courses\\HTML5\\Web Sockets"
+		},
+		{
+			"path": "mlab"
 		}
 	]
 }
