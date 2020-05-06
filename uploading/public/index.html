@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div id="app">
+    <input v-model="name" placeholder="your name">
+    <input type="file" ref="fileChooser"/>
+    <button @click="upload">Upload</button>
+    <img :src="uploadImg" />
+  </div>
+  <script>
+
+    var app = new Vue({
+      el: "#app",
+      data: {
+        name: "Jermerf",
+        uploadImg: ""
+      },
+      methods: {
+        upload(){
+          let files = this.$refs.fileChooser.files
+          if(files.length != 1) {
+            alert("Please select one file")
+            return
+          }
+          let data = new FormData()
+          data.append("name", this.name)
+          data.append("chosenfile", files[0])
+          axios.post('/upload', data, {
+            "Content-Type": "multipart/form-data"
+          }).then(res=>{
+            this.uploadImg = "/uploaded/" + res.data.properties.filename         
+          })
+        }
+      }
+    })
+
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "nodemon-debug",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "serve": "nodemon app.js",
+    "debug": "nodemon --inspect app.js"
+  },
+  "author": "Jermaine Francoeur",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

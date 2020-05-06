@@ -41,6 +41,15 @@
 		},
 		{
 			"path": "mlab"
+		},
+		{
+			"path": "nodemon-debug"
+		},
+		{
+			"path": "..\\submissions\\ATM"
+		},
+		{
+			"path": "uploading"
 		}
 	]
 }
